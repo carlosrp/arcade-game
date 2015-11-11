@@ -1,7 +1,6 @@
 frontend-nanodegree-arcade-game
 ===============================
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
+Arcade game with player-hero needing to cross over path full of enemies-bugs to reach the water at the end.
 
-for self-checking their submission.
-# Arcade Game
+There's four levels (1 being the easiest), with more bugs in each level. Speed and position are randomly initialised in every game. 

@@ -1,10 +1,15 @@
 // Enemies our player must avoid
-var Enemy = function(x0, col, speed) {
+var Enemy = function(col) {
+    // Range for starting point (left of canvas) and speeed
+    //
+    this.range_start = [-200, -100];
+    this.range_speed = [75, 150];
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    this.x = x0; // ??
-    this.y = (col + 1) * 81 - 97; // ??
-    this.speed = speed;
+    this.x = getRandomInt(this.range_start[0], this.range_start[1]);
+    // y coordinate is function of column
+    this.y = (col + 1) * 81 - 97;
+    this.speed = getRandomInt(this.range_speed[0], this.range_speed[1]);
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -34,7 +39,7 @@ Enemy.prototype.update = function(dt) {
 
 // checkCollision function: logic to check whether the enemy
 // and player are in collision.
-// Returns boolean with result of check.
+//Returns boolean with result of check.
 function checkCollision(enemy, player) {
     // Check for collision with Player: if coordinates of
     // enemy are within the max range of this.collision_coord,
@@ -102,6 +107,7 @@ Player.prototype.update = function(dx, dy) {
     // y axis
     if (this.coord[1] > this.y_move_range[1]) {
         // out of canvas through the bottom => stay at the bottom
+        this.coord[1] = this.y_move_range[1];
     } else if (this.coord[1] < this.y_move_range[0]) {
         // out of canvas through the top => goal!!
         this.sound_goal.play();
@@ -133,8 +139,6 @@ Player.prototype.handleInput = function(key) {
         this.coord[1] += this.step;
         break;
     }
-    console.log("Player.coord: ", player.coord[0], player.coord[1]);
-    console.log("Player.coord: ", player.ini_coord[0], player.ini_coord[1]);
 };
 
 Player.prototype.resetPosition = function() {
@@ -146,10 +150,7 @@ Player.prototype.resetPosition = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-var allEnemies = [ //new Enemy(-150, 1, 175),
-                   //new Enemy(-100, 2, 95),
-                   //new Enemy(-125, 3, 125)
-                 ];
+var allEnemies = [ ];
 
 var player =  new Player();
 
@@ -166,37 +167,28 @@ function initLevel() {
     if (!(difLevel >= 1 && difLevel <= 4 )) {
         difLevel = 1;
     }
-    switch(difLevel) {
-    case "1": // one enemy per row
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 1, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 2, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 3, getRandomInt(75, 175)) );
-        break;
-    case "2": // two enemies in first row, one in second and third
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 1, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 1, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 2, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 3, getRandomInt(75, 175)) );
-        break;
-    case "3": // two enemies in first and second rows, one in third
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 1, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 1, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 2, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 2, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 3, getRandomInt(75, 175)) );
-        break;
-    case "4": // two enemies in each row
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 1, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 1, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 2, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 2, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 3, getRandomInt(75, 175)) );
-        allEnemies.push( new Enemy(getRandomInt(-200, -100), 3, getRandomInt(75, 175)) );
-        break;
+    // Create enemies based on Level:
+    //   1) One all rows
+    //   2) Two first row, one second and third rows
+    //   3) Two first and second rows, one third row
+    //   4) Two all rows
+    //
+    // First, one enemy per row (baseline for level 1))
+    allEnemies.push( new Enemy(1) );
+    allEnemies.push( new Enemy(2) );
+    allEnemies.push( new Enemy(3) );
+    if (difLevel > "1") {
+        // another enemies in first row
+        allEnemies.push( new Enemy(1) );
+        if (difLevel > "2") {
+            // another enemy in second rwo
+            allEnemies.push( new Enemy(2) );
+            if (difLevel > "3") {
+                // another enemy in third row
+                allEnemies.push( new Enemy(3) );
+            }
+        }
     }
-
-    console.log("Level:", difLevel);
-    //////
 };
 
 // This listens for key presses and sends the keys to your

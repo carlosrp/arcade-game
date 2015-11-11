@@ -27,10 +27,6 @@ var Engine = (function(global) {
         //ctx_txt = canvas_txt.getContext('2d'),
         lastTime;
 
-        //canvas_txt.width = 505;
-        //canvas_txt.height = 30;
-        //doc.body.appendChild(canvas_txt);
-
         canvas.width = 505;
         canvas.height = 606;
         ctx.font = "16px Comic Sans MS";
