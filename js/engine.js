@@ -23,11 +23,19 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
+        //canvas_txt = doc.createElement('canvas'),
+        //ctx_txt = canvas_txt.getContext('2d'),
         lastTime;
 
-    canvas.width = 505;
-    canvas.height = 606;
-    doc.body.appendChild(canvas);
+        //canvas_txt.width = 505;
+        //canvas_txt.height = 30;
+        //doc.body.appendChild(canvas_txt);
+
+        canvas.width = 505;
+        canvas.height = 606;
+        ctx.font = "16px Comic Sans MS";
+        doc.body.appendChild(canvas);
+
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -47,6 +55,7 @@ var Engine = (function(global) {
          */
         update(dt);
         render();
+        renderCounters();
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -66,6 +75,9 @@ var Engine = (function(global) {
     function init() {
         reset();
         lastTime = Date.now();
+        // Select level before starting game
+        initLevel();
+        // Main loop
         main();
     }
 
@@ -153,6 +165,16 @@ var Engine = (function(global) {
         });
 
         player.render();
+    }
+
+    /* Render counters for collisions and goals
+     */
+    function renderCounters() {
+        ctx.clearRect(0, 0, canvas.width, 50);
+        ctx.fillStyle = "red";
+        ctx.fillText("Collisions: " + player.num_collisions, 10, 20);
+        ctx.fillStyle = "green";
+        ctx.fillText("Goals: " + player.num_goals, canvas.width*0.75, 20);
     }
 
     /* This function does nothing but it could have been a good place to
