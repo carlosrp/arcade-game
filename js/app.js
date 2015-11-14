@@ -19,7 +19,7 @@ var Enemy = function(col) {
     // Collision detection => use enemy_size starting from relative
     // enemy_coord where the bug drawing actually is within the png
     // file
-    this.dwg_coord = [0, 80]
+    this.dwg_coord = [0, 80];
     this.dwg_size = [80, 60];
 };
 
